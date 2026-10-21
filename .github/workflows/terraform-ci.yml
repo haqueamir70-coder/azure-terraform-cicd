@@ -25,7 +25,7 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
        - name : checkoutcode
-         uses: actions/checkout@v4
+         uses: actions/checkout@v7
 
        - name: Azure Login
          run: az login --service-principal --username a7937cb5-c00d-4c15-9e0b-fee7aac89a8d --password dZx8Q~d0HJEFDzusCyROK2WFoiDdbGzcrBMJvcpF --tenant 3c7bd315-a86f-4b23-90b9-6318c8a94eea
