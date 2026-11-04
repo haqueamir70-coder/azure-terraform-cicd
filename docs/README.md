@@ -35,3 +35,46 @@ flowchart TD
 
 ## Interview preparation note
 Be ready to explain the design decision, security boundary, failure mode, operational signal and validation evidence for each answer. Clearly separate implemented code, CI-validated configuration, cloud-deployed resources and future roadmap items.
+
+
+## Interview questions — suggested answers
+
+### 1. Answer
+
+The workflow validates formatting, initializes without a backend for credential-free validation, validates configuration and can run security checks. A protected manual path can request an OIDC-authenticated plan; it does not auto-apply.
+
+### 2. Answer
+
+init -backend=false downloads providers and prepares local validation without connecting to a configured remote backend. It is suitable for syntax/validation jobs that need no state access.
+
+### 3. Answer
+
+GitHub Actions requests an OIDC token; Microsoft Entra validates the federated issuer, subject and audience, then issues short-lived Azure tokens for the app identity.
+
+### 4. Answer
+
+Restrict issuer to GitHub, audience to Azure token exchange, and subject to the exact repository plus branch or protected environment. Avoid wildcard trust where possible.
+
+### 5. Answer
+
+A protected environment can require reviewers, scope secrets/variables and separate production authorization from ordinary pull-request validation.
+
+### 6. Answer
+
+Auto-apply can modify or destroy infrastructure without a human reviewing the actual plan. Production changes should use plan artifacts, approval and a controlled apply stage.
+
+### 7. Answer
+
+Use a dedicated Storage Account/container with encryption, private access, state locking/lease controls, versioning and narrowly scoped data-plane permissions.
+
+### 8. Answer
+
+Use secret scanning and push protection, OIDC instead of client secrets, masked environment variables, restricted logs, and rotate/revoke any credential exposed in history.
+
+### 9. Answer
+
+Immediately revoke the exposed credential, inspect sign-in and Activity Logs, check role assignments and resource changes, replace consumers with OIDC, then consider history cleanup after coordination.
+
+### 10. Answer
+
+Add Checkov/TFLint, plan JSON policy checks, artifact retention, environment approvals, drift detection and a separate apply workflow with explicit authorization.
