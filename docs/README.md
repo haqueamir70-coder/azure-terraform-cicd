@@ -78,3 +78,7 @@ Immediately revoke the exposed credential, inspect sign-in and Activity Logs, ch
 ### 10. Answer
 
 Add Checkov/TFLint, plan JSON policy checks, artifact retention, environment approvals, drift detection and a separate apply workflow with explicit authorization.
+
+## Complete zero-to-hero guide
+
+See [ZERO-TO-HERO.md](./ZERO-TO-HERO.md) for the business scenario, architecture walkthrough, tool-by-tool explanations, implementation sequence, practical commands, troubleshooting playbook and additional scenario-based interview questions with answers.
