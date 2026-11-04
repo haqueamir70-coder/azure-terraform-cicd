@@ -117,3 +117,10 @@ Run commands from the directory containing the Terraform root module. Review the
 ## Author
 
 MD Amirul Haque · [GitHub profile](https://github.com/haqueamir70-coder) · [LinkedIn](https://www.linkedin.com/in/md-amirul-haque/)
+
+
+## Security remediation and deployment workflow
+
+The historical workflow contained an exposed service-principal credential and an automatic apply step. The current workflow removes embedded credentials and never applies infrastructure automatically. **Revoke and rotate any service-principal secret that was previously committed; removing it from the latest file does not erase it from Git history.** Review Azure sign-in/activity logs for unexpected use.
+
+The default CI path runs formatting, backend-free initialization and validation without Azure credentials. An optional manually requested plan uses GitHub OIDC through the protected azure-plan environment. Configure AZURE_CLIENT_ID, AZURE_TENANT_ID and AZURE_SUBSCRIPTION_ID as environment secrets, establish a federated credential restricted to this repository/environment, and grant only the permissions required to plan. There is no automated apply job.
