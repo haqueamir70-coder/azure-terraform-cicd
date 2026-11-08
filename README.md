@@ -149,6 +149,12 @@ Do not create or use `AZURE_CLIENT_SECRET`; this workflow is designed for OIDC. 
 - [ ] Obtain approval before any apply.
 - [ ] Record the change and rollback procedure.
 
+## Verified Azure OIDC evidence
+
+The manually dispatched [Azure Terraform CI #31](../../actions/runs/42474695790) completed all three jobs successfully on 8 November 2026. The authenticated plan job's logs confirm the GitHub OIDC subject, successful Azure CLI login, successful subscription selection and a Terraform plan result of **1 to add, 0 to change, 0 to destroy**.
+
+This run used `terraform init -backend=false`; it is an authenticated backend-free demonstration plan, not a remote-state drift assessment or deployment. No `terraform apply` was executed. See [OIDC verification evidence](docs/OIDC-VERIFICATION.md) for the exact scope, run reference and remaining controls.
+
 ## Validation evidence
 
 A successful `fmt`, `init` or `validate` step proves configuration checks completed; it does **not** prove Azure resources were deployed. Check the repository's [Actions history](../../actions) for current workflow evidence.
