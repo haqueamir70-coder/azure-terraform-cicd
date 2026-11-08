@@ -47,3 +47,15 @@ Before any apply-capable workflow is introduced:
 - Review Microsoft Entra service-principal sign-in logs and Azure Activity Logs for unexpected access.
 - Verify repository secret scanning and push protection settings.
 - Pin third-party GitHub Actions to reviewed immutable commit SHAs.
+
+
+## Follow-up validation — existing resource group
+
+After the owner created `rg-github-cicd-demo` manually, the root example was changed from an Azure resource-group resource to a data source. This prevents Terraform from proposing a duplicate resource-group creation.
+
+The resulting push workflow [Azure Terraform CI #34](../../actions/runs/42478220728) completed successfully:
+- Root Terraform formatting, initialization with backend disabled, and validation: success.
+- Dated lab initialization and validation: success.
+- Optional authenticated plan: skipped because this was a push event, not a manual dispatch.
+
+This follow-up validates configuration syntax and confirms the normal CI path. It does **not** verify the resource-group data lookup against Azure; the authenticated plan must be manually dispatched to test that lookup. It also does not test the remote backend.
