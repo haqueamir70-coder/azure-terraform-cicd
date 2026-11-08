@@ -78,6 +78,46 @@ terraform validate
 
 Inspect the workflow definitions in `.github/workflows/` before relying on any CI behavior. Run `terraform plan` only after configuring the correct backend, identity, subscription and input values.
 
+## GitHub Actions OIDC setup
+
+The optional `plan` job uses the GitHub Actions environment named `azure-plan`. Configure the same environment in the repository settings before running an authenticated plan.
+
+### Microsoft Entra federated credential
+
+Create a federated identity credential on the intended Entra app registration with these values:
+
+| Setting | Value |
+|---|---|
+| Issuer | `https://token.actions.githubusercontent.com` |
+| GitHub organization | `haqueamir70-coder` |
+| Organization ID | `253802285` |
+| Repository | `azure-terraform-cicd` |
+| Repository ID | `1331310763` |
+| Entity type | `Environment` |
+| Environment | `azure-plan` |
+| Audience | `api://AzureADTokenExchange` |
+
+The Entra portal's immutable-ID subject format should be generated from the organization, repository and environment fields. Do not manually substitute a different subject. The configured subject should correspond to this repository and the `azure-plan` environment.
+
+### GitHub environment secrets
+
+Add the following secrets to **Settings → Environments → azure-plan → Environment secrets**:
+
+- `AZURE_CLIENT_ID`: the intended Entra application (client) ID.
+- `AZURE_TENANT_ID`: the Entra tenant ID.
+- `AZURE_SUBSCRIPTION_ID`: the target Azure subscription ID.
+
+Do not create or use `AZURE_CLIENT_SECRET`; this workflow is designed for OIDC. Keep tenant and subscription identifiers in the private environment configuration rather than committing them to source.
+
+### Run an authenticated plan
+
+1. Confirm the Entra app has the federated credential for this exact repository and environment.
+2. Confirm the three environment secrets above exist and the app has only the required Azure RBAC permissions.
+3. Open **Actions → Azure Terraform CI → Run workflow**.
+4. Select branch `main` and set `run_plan` to `true`.
+5. Review the OIDC login and Terraform plan output. A successful validation-only run does not prove Azure authentication.
+6. This workflow does not run `terraform apply`.
+
 ## Security model
 
 - **No embedded credentials:** never put service-principal secrets in YAML, scripts or committed variable files.
